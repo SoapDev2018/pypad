@@ -13,7 +13,8 @@ class MyPad:
 	__thisMenuBar = Menu(__root)
 	__thisFileMenu = Menu(__thisMenuBar, tearoff=0) 
 	__thisEditMenu = Menu(__thisMenuBar, tearoff=0) 
-	__thisHelpMenu = Menu(__thisMenuBar, tearoff=0) 
+	__thisHelpMenu = Menu(__thisMenuBar, tearoff=0)
+	__thisSearchMenu = Menu(__thisMenuBar, tearoff=0)
 	
 	__thisScrollBar = Scrollbar(__thisTextArea)
 	__file = None
@@ -59,13 +60,21 @@ class MyPad:
 		self.__root.bind_all("<Control-s>", self.__saveFile)
 		self.__root.bind_all("<Control-z>", self.__quitApplication)
 
+		self.__thisEditMenu.add_command(label = "Undo", command = None)
+		self.__thisEditMenu.add_command(label = "Redo", command = None)
+		self.__thisEditMenu.add_separator()
 		self.__thisEditMenu.add_command(label = "Cut", command = self.__cut, accelerator="Ctrl+X")
 		self.__thisEditMenu.add_command(label = "Copy", command = self.__copy, accelerator="Ctrl+C")
 		self.__thisEditMenu.add_command(label = "Paste", command = self.__paste, accelerator="Ctrl+V")
+		self.__thisEditMenu.add_command(label = "Select All", command = None)
 		self.__thisMenuBar.add_cascade(label = "Edit", menu = self.__thisEditMenu)
 		self.__root.bind_all("<Control-x>", self.__cut)
 		self.__root.bind_all("<Control-c>", self.__copy)
 		self.__root.bind_all("<Control-v>", self.__paste)
+		
+		self.__thisSearchMenu.add_command(label = "Search", command = None)
+		self.__thisSearchMenu.add_command(label = "Search & Replace", command = None)
+		self.__thisMenuBar.add_cascade(label = "Search", menu = self.__thisSearchMenu)
 
 		self.__thisHelpMenu.add_command(label = "About MyPad", command = self.__showAbout)
 		self.__thisMenuBar.add_cascade(label = "?", menu = self.__thisHelpMenu)
