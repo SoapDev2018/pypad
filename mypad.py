@@ -48,17 +48,24 @@ class MyPad:
 		self.__root.grid_columnconfigure(0, weight = 1)
 		
 		self.__thisTextArea.grid(sticky = N + E + S + W) 
-		self.__thisFileMenu.add_command(label = "New", command = self.__newFile)
-		self.__thisFileMenu.add_command(label = "Open", command = self.__openFile)
-		self.__thisFileMenu.add_command(label = "Save", command = self.__saveFile)
+		self.__thisFileMenu.add_command(label = "New", command = self.__newFile, accelerator="Ctrl+N")
+		self.__thisFileMenu.add_command(label = "Open", command = self.__openFile, accelerator="Ctrl+O")
+		self.__thisFileMenu.add_command(label = "Save", command = self.__saveFile, accelerator="Ctrl+S")
 		self.__thisFileMenu.add_separator()
-		self.__thisFileMenu.add_command(label = "Exit", command = self.__quitApplication)
+		self.__thisFileMenu.add_command(label = "Exit", command = self.__quitApplication, accelerator="Ctrl+Z")
 		self.__thisMenuBar.add_cascade(label = "File", menu = self.__thisFileMenu)
+		self.__root.bind_all("<Control-n>", self.__newFile)
+		self.__root.bind_all("<Control-o>", self.__openFile)
+		self.__root.bind_all("<Control-s>", self.__saveFile)
+		self.__root.bind_all("<Control-z>", self.__quitApplication)
 
-		self.__thisEditMenu.add_command(label = "Cut", command = self.__cut)
-		self.__thisEditMenu.add_command(label = "Copy", command = self.__copy)
-		self.__thisEditMenu.add_command(label = "Paste", command = self.__paste)
+		self.__thisEditMenu.add_command(label = "Cut", command = self.__cut, accelerator="Ctrl+X")
+		self.__thisEditMenu.add_command(label = "Copy", command = self.__copy, accelerator="Ctrl+C")
+		self.__thisEditMenu.add_command(label = "Paste", command = self.__paste, accelerator="Ctrl+V")
 		self.__thisMenuBar.add_cascade(label = "Edit", menu = self.__thisEditMenu)
+		self.__root.bind_all("<Control-x>", self.__cut)
+		self.__root.bind_all("<Control-c>", self.__copy)
+		self.__root.bind_all("<Control-v>", self.__paste)
 
 		self.__thisHelpMenu.add_command(label = "About MyPad", command = self.__showAbout)
 		self.__thisMenuBar.add_cascade(label = "?", menu = self.__thisHelpMenu)
@@ -71,13 +78,13 @@ class MyPad:
 		self.__thisTextArea.config(yscrollcommand = self.__thisScrollBar.set)
 		
 
-	def __quitApplication(self):
+	def __quitApplication(self,*args):
 		self.__root.destroy()
 
 	def __showAbout(self):
-		showinfo("Notepad", "Author: Sayantan Chaudhuri")
+		showinfo("Notepad", "Original Author: Mrinal Verma, Modified By: Sayantan Chaudhuri")
 		
-	def __openFile(self):
+	def __openFile(self,*args):
 		self.__file = askopenfilename(defaultextension = ".txt", filetypes=[("All Files","*.*"),("Text Documents","*.txt")])
 		if self.__file == "":
 			self.__file = None
@@ -88,12 +95,12 @@ class MyPad:
 			self.__thisTextArea.insert(1.0,file.read())
 			file.close()
 			
-	def __newFile(self): 
+	def __newFile(self,*args): 
 		self.__root.title("Untitled - MyPad") 
 		self.__file = None
 		self.__thisTextArea.delete(1.0,END) 
 		
-	def __saveFile(self):
+	def __saveFile(self,*args):
 		if self.__file == None:
 			self.__file = asksaveasfilename(initialfile = 'Untitled.txt', defaultextension = ".txt", filetypes=[("All Files","*.*"),("Text Documents","*.txt")])
 			
@@ -109,13 +116,13 @@ class MyPad:
 			file.write(self.__thisTextArea.get(1.0,END))
 			file.close()
 			
-	def __cut(self):
+	def __cut(self,*args):
 		self.__thisTextArea.event_generate("<<Cut>>")
 		
-	def __copy(self):
+	def __copy(self,*args):
 		self.__thisTextArea.event_generate("<<Copy>>")
 		
-	def __paste(self):
+	def __paste(self,*args):
 		self.__thisTextArea.event_generate("<<Paste>>")
 		
 	def run(self):
